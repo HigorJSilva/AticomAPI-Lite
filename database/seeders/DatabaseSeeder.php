@@ -2,17 +2,22 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
+use App\Models\Modalidades;
+use Database\Seeders\SeederBase;
 
-class DatabaseSeeder extends Seeder
+class DatabaseSeeder extends SeederBase
 {
     /**
-     * Seed the application's database.
+     * Run the database seeds.
      *
      * @return void
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        $this->call([
+            ModalidadesSeeder::class,
+            ReferenciasSeeder::class,
+            AtividadesSeeder::class,
+        ]);
     }
 }
