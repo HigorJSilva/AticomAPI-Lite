@@ -5,21 +5,12 @@ namespace App\Services;
 use App\Models\Atividades;
 use App\Models\Referencias;
 
-class AtividadesService extends BaseService
+class AtividadesService extends CrudService
 {
-    protected $produtoId = null;
-    protected $atualizacao = null;
-    protected $model = null;
-    protected $data = [];
-    protected $id = null;
-
+    
     public function getModel($data = [])
     {
-        $produtos = new Atividades($data);
-        if (empty($this->data)) return $produtos;
-        return $produtos->where('id', $this->id)
-            // TODO->where('alunoId', $this->data['alunoId'])
-            ->firstOrFail();
+        return new Atividades($data);
     }
 
     protected function prepareSave($data, $additionalData)
@@ -36,37 +27,37 @@ class AtividadesService extends BaseService
         return $finalData;
     }
 
-    public function rules()
-    {
-        return [
-            'descricao' => [
-                'required',
-                'string',
-                'min:10',
-                'max:140'
-            ],
-            'certificado' => [
-                'nullable',
-                'string'
-            ],
-            'referenciaId' => [
-                'required',
-                'exists:referencias,id',
-            ],
-            'presencial' => [
-                'required',
-                'boolean'
-            ],
-            'horasCertificado' => [
-                'required',
-                'numeric',
-                'min:2',
-            ],
-            'feedback' => [
-                'string',
-                'min:20',
-                'max:240'
-            ],
-        ];
-    }
+    // public function getRules($data, $saving, $model)
+    // {
+    //     return [
+    //         'descricao' => [
+    //             'required',
+    //             'string',
+    //             'min:10',
+    //             'max:140'
+    //         ],
+    //         'certificado' => [
+    //             'nullable',
+    //             'string'
+    //         ],
+    //         'referenciaId' => [
+    //             'required',
+    //             'exists:referencias,id',
+    //         ],
+    //         'presencial' => [
+    //             'required',
+    //             'boolean'
+    //         ],
+    //         'horasCertificado' => [
+    //             'required',
+    //             'numeric',
+    //             'min:2',
+    //         ],
+    //         'feedback' => [
+    //             'string',
+    //             'min:20',
+    //             'max:240'
+    //         ],
+    //     ];
+    // }
 }

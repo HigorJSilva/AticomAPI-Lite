@@ -19,6 +19,11 @@ class AddForeignKeysToAtividadesTable extends Migration
                 ->on('referencias')
                 ->onUpdate('NO ACTION')
                 ->onDelete('NO ACTION');
+                $table->foreign('modalidadeId', 'atividades_modalidadeId_foreign')
+                ->references('id')
+                ->on('modalidades')
+                ->onUpdate('NO ACTION')
+                ->onDelete('NO ACTION');
         });
     }
 

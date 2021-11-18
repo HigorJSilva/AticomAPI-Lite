@@ -10,7 +10,7 @@ class Atividades extends ModelBase
     protected $fillable = [
         'descricao',
         'certificado',
-        'modalidade',
+        'modalidadeId',
         'referenciaId',
         'presencial',
         'horasCertificado',
