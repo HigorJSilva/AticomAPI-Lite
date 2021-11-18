@@ -2,32 +2,60 @@
 
 namespace App\Services;
 
+use App\Helpers\AuthorizesActions;
 use App\Helpers\Resposta;
 use Exception;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use stdClass;
 
-abstract class BaseService
+abstract class CrudService
 {
+    use AuthorizesActions;
 
     public function __construct()
     {
     }
 
+    protected function tratamentoExceptions($exception, $validator = null){
+        $type = get_class($exception);
+        switch ($type) {
+            case ValidationException::class:
+                $errors = $validator->errors();
+                return Resposta::object(false, null, null, $errors->toArray());
+                break;
+            case ModelNotFoundException::class:
+                return Resposta::object(false, null, null, [__('services.erros.no_results')]);
+                break;
+            case RespostaException::class:
+                return Resposta::object($exception->status, $exception->getMessage(), $exception->dados, $exception->erros);
+                break;
+            default:
+                $erros = (config('app.debug')) ? array(
+                    __('services.erros.erro_interno'), get_class($exception),$exception->getMessage(), $exception->getFile(), $exception->getLine()
+                ) : array(
+                    __('services.erros.erro_interno')
+                );
+                return Resposta::object(false, null, null, $erros);
+        }
+    }
     /**
      * @param array $params
-     * @return array
+     * @return Resposta
      */
     public function list($params = [])
     {
         $model = $this->getModel();
-        
-       
+        $authorize = $this->authorize('viewAny', $model);
+        if (!$authorize->status) {
+            return $authorize;
+        }
         $page = $params['page'] ?? 1;
         $perPage = $params['perPage'] ?? $this->perPage($model);
         $list = $this->prepareList($this->applyFilters($model, $params), $params);
@@ -39,7 +67,8 @@ abstract class BaseService
         foreach ($items as $model) {
             $this->prepareItem($model);
         }
-        return $items instanceof Arrayable ? $items->toArray() : $items;
+        $items = $items instanceof Arrayable ? $items->toArray() : $items;
+        return Resposta::object(true, null, $items, null);
     }
 
     /**
@@ -50,15 +79,15 @@ abstract class BaseService
     public function search($id, $params = [])
     {
         try {
+
             $model = $this->applyFilters($this->getModel(), $params)->findOrFail($id);
-            return Resposta::object(true, null, [$this->prepareItem($model)], null);
-        } catch (Exception $e) {
-            if ($e instanceof ModelNotFoundException) {
-                return Resposta::object(false, null, null, [__('services.erros.no_results')]);
+            $authorize = $this->authorize('view', $model);
+            if (!$authorize->status) {
+                return $authorize;
             }
-            return Resposta::object(false, null, null, [
-                __('services.erros.erro_interno'),
-            ]);
+            return Resposta::object(true, null, [$this->prepareItem($model)], null);
+        } catch (Exception $exception) {
+            return $this->tratamentoExceptions($exception, new stdClass());
         }
     }
 
@@ -102,19 +131,17 @@ abstract class BaseService
      */
     public function save($data)
     {
-       
+        $authorize = $this->authorize('create', $this->getModel());
+        if (!$authorize->status) {
+            return $authorize;
+        }
         $validator = $this->getValidator($data, true, null);
         try {
             $validator->validate();
+            $data = !empty($this->getRules($data, false, $this->getModel())) ? $validator->validated() : $data;
             return Resposta::object(true, null, $this->performSave($data, $this->beforeSave($data)), null);
-        } catch (Exception $erro) {
-            if ($erro instanceof ValidationException) {
-                $errors = $validator->errors();
-                return Resposta::object(false, null, null, $errors->toArray());
-            }
-            return Resposta::object(false, null, null, [
-                __('services.erros.erro_interno'),
-            ]);
+        } catch (Exception $exception) {
+            return $this->tratamentoExceptions($exception, $validator);
         }
     }
 
@@ -152,23 +179,17 @@ abstract class BaseService
         try {
             $model = $this->getModel();
             $model = $this->primaryKeyMultiple($data, $id, $model);
-            
+            $authorize = $this->authorize('update', $model);
+            if (!$authorize->status)
+                return $authorize;
+
             $validator = $this->getValidator($data, false, $model);
             try {
                 $validator->validate();
+                $data = !empty($this->getRules($data, true, $model)) ? $validator->validated() : $data;
                 return Resposta::object(true, null, [$this->performUpdate($model, $data, $this->beforeUpdate($data, $model))], null);
-            } catch (Exception $erro) {
-                if ($erro instanceof ValidationException) {
-                    $errors = $validator->errors();
-                    return Resposta::object(false, null, null, $errors->toArray());
-                }
-                return Resposta::object(false, null, null, [
-                    __('services.erros.erro_interno'),
-                    get_class($erro),
-                    $erro->getMessage(),
-                    $erro->getFile(),
-                    $erro->getLine(),
-                ]);
+            } catch (Exception $exception) {
+                return $this->tratamentoExceptions($exception, $validator);
             }
         } catch (Exception $e) {
             if ($e instanceof ModelNotFoundException) {
@@ -183,10 +204,11 @@ abstract class BaseService
      * @param model $model
      * @return Model
      */
-    protected function primaryKeyMultiple($data, $id, $model){
-        if(isset($data['primaryKey'])){
+    protected function primaryKeyMultiple($data, $id, $model)
+    {
+        if (isset($data['primaryKey'])) {
             return $model->where($data['primaryKey'])->firstOrFail();
-        }else{
+        } else {
             return $model->findOrFail($id);
         }
     }
@@ -222,19 +244,17 @@ abstract class BaseService
     public function deactivate($id)
     {
         $model = $this->getModel()->findOrFail($id);
-               
+        $authorize = $this->authorize('delete', $model);
+        if (!$authorize->status) {
+            return $authorize;
+        }
         return $this->performDeactivate($model);
     }
 
     protected function performDeactivate($model)
     {
-        try{
-            $model->delete();
-            return ['status' => true];
-        }
-        catch(Exception $e){
-            return ['status' => false, 'mensagem' => $e->getMessage()];
-        }
+        $model->update(['status' => 'deactivated']);
+        return [];
     }
 
     /**
@@ -244,8 +264,10 @@ abstract class BaseService
     public function reactivate($id)
     {
         $model = $this->getModel()->findOrFail($id);
-        
-       
+        $authorize = $this->authorize('restore', $model);
+        if (!$authorize->status) {
+            return $authorize;
+        }
         return $this->performActivate($model);
     }
 
@@ -297,6 +319,7 @@ abstract class BaseService
      */
     protected function prepareSave($data, $additionalData)
     {
+        $data['empresaId'] = Auth::user()->empresaId ?? null;
         return array_merge($data, $additionalData);
     }
 
@@ -425,5 +448,4 @@ abstract class BaseService
     {
         return $list;
     }
-
 }
