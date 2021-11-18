@@ -17,7 +17,7 @@ class CreateAtividadesTable extends Migration
             $table->id();
             $table->string('descricao', 140);
             $table->string('certificado', 240)->nullable();
-            $table->char('modalidadeId', 1);
+            $table->foreignId('modalidadeId');
             $table->foreignId('referenciaId')->index('atividades_referenciaId_idx');
             $table->boolean('presencial');
             $table->integer('horasCertificado');
