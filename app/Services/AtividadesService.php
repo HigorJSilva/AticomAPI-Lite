@@ -15,7 +15,6 @@ class AtividadesService extends CrudService
 
     protected function prepareSave($data, $additionalData)
     {
-        $data['modalidade'] = Referencias::find($data['referenciaId'])->firstOrFail()->modalidadeId;
         $data['horasConsideradas'] = $data['horasCertificado'] < 40 ?: 40;
         return $data;
     }

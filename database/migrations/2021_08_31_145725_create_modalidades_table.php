@@ -15,7 +15,7 @@ class CreateModalidadesTable extends Migration
     {
         Schema::create('modalidades', function (Blueprint $table) {
             $table->id();
-            $table->char('nome', 3);
+            $table->string('nome', 45);
             $table->integer('cargaHorariaMax');
             $table->integer('cargaHorariaMin');
             $table->timestamps();

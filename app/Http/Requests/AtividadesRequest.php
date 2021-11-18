@@ -19,11 +19,6 @@ class AtividadesRequest extends BaseRequest
                 'nullable',
                 'string'
             ],
-            'modalidadeId' =>
-            [
-                'required',
-                'exists:modalidades,id',
-            ],
             'referenciaId' => [
                 'required',
                 'exists:referencias,id',
