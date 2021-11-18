@@ -2,13 +2,13 @@
 
 namespace App\Helpers;
 
-use App\Services\BaseService;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 abstract class JsonCrudController extends Controller
 {
     /**
-     * @var BaseService
+     * @var CrudService
      */
     protected $service;
 
@@ -18,6 +18,11 @@ abstract class JsonCrudController extends Controller
         $this->service = app('App\Services\\' . $resourceName . 'Service');
     }
 
+    private function getRequest($request)
+    {
+        return method_exists($request, 'validated') && is_callable([$request, 'validated']) ? $request->validated() : $request->all();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -25,7 +30,7 @@ abstract class JsonCrudController extends Controller
      */
     public function index(Request $request)
     {
-        return $this->service->list($this->prepareFilters($request->all()));
+        return jsonDefaultResponse($this->service->list($this->prepareFilters($this->getRequest($request))));
     }
 
     /**
@@ -36,7 +41,10 @@ abstract class JsonCrudController extends Controller
      */
     public function store(Request $request)
     {
-        return $this->jsonDefaultResponse($this->service->save($this->prepareData($request->all())));
+        $prepare = $this->prepareData($request->all());
+
+        $save = $this->service->save($prepare);
+        return jsonDefaultResponse($save);
     }
 
     /**
@@ -47,7 +55,7 @@ abstract class JsonCrudController extends Controller
      */
     public function show(Request $request, $id)
     {
-        return $this->jsonDefaultResponse($this->service->search($id, $this->prepareFilters($request->all())));
+        return jsonDefaultResponse($this->service->search($id, $this->prepareFilters($request->all())));
     }
 
     /**
@@ -59,7 +67,7 @@ abstract class JsonCrudController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return $this->jsonDefaultResponse($this->service->update($id, $this->prepareData($request->all())));
+        return jsonDefaultResponse($this->service->update($id, $this->prepareData($request->all())));
     }
 
     /**
@@ -70,7 +78,7 @@ abstract class JsonCrudController extends Controller
      */
     public function destroy($id)
     {
-        return $this->jsonDefaultResponse((object) $this->service->deactivate($id));
+        return jsonDefaultResponse((object) $this->service->deactivate($id));
     }
 
     /**
@@ -80,7 +88,7 @@ abstract class JsonCrudController extends Controller
      */
     public function reactivate($id)
     {
-        return $this->jsonDefaultResponse((object) $this->service->reactivate($id));
+        return jsonDefaultResponse((object) $this->service->reactivate($id));
     }
 
     /**
@@ -101,11 +109,4 @@ abstract class JsonCrudController extends Controller
         return $data;
     }
 
-    private function jsonDefaultResponse(object $payload, int $status_code = 200, $stacktrace = null)
-    {
-        if (config('app.debug')) {
-            $payload->stacktrace = $stacktrace;
-        }
-        return response()->json((array)$payload, $status_code);
-    }
 }
