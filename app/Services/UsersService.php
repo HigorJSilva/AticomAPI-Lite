@@ -14,6 +14,7 @@ class UsersService extends CrudService
 
     protected function prepareSave($data, $additionalData)
     {
+        $data['senha'] = bcrypt($data['senha']);
         return $data;
     }
 
