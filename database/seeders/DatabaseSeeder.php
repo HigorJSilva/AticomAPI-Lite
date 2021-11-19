@@ -18,8 +18,9 @@ class DatabaseSeeder extends SeederBase
         $this->call([
             ModalidadesSeeder::class,
             ReferenciasSeeder::class,
-            AtividadesSeeder::class,
             MatrizesSeeder::class,
+            UserSeeder::class,
+            AtividadesSeeder::class,
         ]);
     }
 }

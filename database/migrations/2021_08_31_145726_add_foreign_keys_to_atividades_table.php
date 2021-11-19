@@ -19,6 +19,11 @@ class AddForeignKeysToAtividadesTable extends Migration
                 ->on('referencias')
                 ->onUpdate('NO ACTION')
                 ->onDelete('NO ACTION');
+            $table->foreign('alunoId', 'atividades_alunoId_foreign')
+                ->references('id')
+                ->on('users')
+                ->onUpdate('NO ACTION')
+                ->onDelete('NO ACTION');
         });
     }
 
@@ -31,7 +36,6 @@ class AddForeignKeysToAtividadesTable extends Migration
     {
         Schema::table('atividades', function (Blueprint $table) {
             $table->dropForeign('atividades_referenciaId_foreign');
-
         });
     }
 }

@@ -15,6 +15,8 @@ class AtividadesService extends CrudService
 
     protected function prepareSave($data, $additionalData)
     {
+        //TODO alterar para aluno autenticado
+        $data['alunoId'] = '1';
         $data['horasConsideradas'] = $data['horasCertificado'] < 40 ?: 40;
         return $data;
     }
