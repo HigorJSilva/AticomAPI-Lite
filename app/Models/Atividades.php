@@ -10,6 +10,7 @@ class Atividades extends ModelBase
     protected $fillable = [
         'descricao',
         'certificado',
+        'alunoId',
         'referenciaId',
         'presencial',
         'horasCertificado',
@@ -18,10 +19,15 @@ class Atividades extends ModelBase
     ];
 
     protected $with =[
-        'referencias'
+        'referencias',
+        'aluno'
     ];
 
     public function referencias(){
         return $this->belongsTo(Referencias::class, 'referenciaId', 'id');
+    }
+
+    public function aluno(){
+        return $this->belongsTo(User::class, 'alunoId', 'id');
     }
 }
