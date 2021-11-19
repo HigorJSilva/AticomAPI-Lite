@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Matrizes;
 use App\Models\Modalidades;
 use Database\Seeders\SeederBase;
 
@@ -18,6 +19,7 @@ class DatabaseSeeder extends SeederBase
             ModalidadesSeeder::class,
             ReferenciasSeeder::class,
             AtividadesSeeder::class,
+            MatrizesSeeder::class,
         ]);
     }
 }

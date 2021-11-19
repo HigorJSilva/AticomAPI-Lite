@@ -18,9 +18,14 @@ class User extends Authenticatable
      * @var string[]
      */
     protected $fillable = [
-        'name',
+        'nome',
         'email',
-        'password',
+        'senha',
+        'cpf',
+        'matrizId',
+        'role',
+        'isPendente',
+        'isCompleto',
     ];
 
     /**
@@ -41,4 +46,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected $with = [
+        'matriz'
+    ];
+
+    public function Matriz(){
+        return $this->belongsTo(Matrizes::class, 'matrizId', 'id');
+    }
 }

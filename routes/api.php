@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AtividadesController;
+use App\Http\Controllers\Api\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,3 +21,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('atividades', AtividadesController::class);
+
+//TODO: dentro do group da autenticação
+Route::apiResource('users', UsersController::class)->except('store');
+//TODO:fora da autenticação
+Route::apiResource('users', UsersController::class)->only('store');
