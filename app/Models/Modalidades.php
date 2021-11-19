@@ -13,7 +13,13 @@ class Modalidades extends ModelBase
         'cargaHorariaMin',
     ];
 
-    public function atividadesReferencia(){
-        return $this->hasMany(Referencias::class, 'modalidadeId');
+    public $guardFromUpdate = [
+        'nome'
+    ];
+
+    public function referencias()
+    {
+        $teste = $this->hasMany(Referencias::class, 'modalidadeId', 'id');
+        return  $teste;
     }
 }
