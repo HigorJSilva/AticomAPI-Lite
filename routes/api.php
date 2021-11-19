@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\AtividadesController;
+use App\Http\Controllers\Api\ModalidadesController;
+use App\Http\Controllers\Api\ReferenciasController;
 use App\Http\Controllers\Api\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +23,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('atividades', AtividadesController::class);
+Route::apiResource('referencias', ReferenciasController::class);
+Route::apiResource('modalidades', ModalidadesController::class)->except(['store', 'delete']);
 
 //TODO: dentro do group da autenticação
 Route::apiResource('users', UsersController::class)->except('store');
