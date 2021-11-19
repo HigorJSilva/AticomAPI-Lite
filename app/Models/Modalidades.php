@@ -19,7 +19,6 @@ class Modalidades extends ModelBase
 
     public function referencias()
     {
-        $teste = $this->hasMany(Referencias::class, 'modalidadeId', 'id');
-        return  $teste;
+        return  $this->hasMany(Referencias::class, 'modalidadeId', 'id');
     }
 }

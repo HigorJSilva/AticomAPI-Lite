@@ -19,7 +19,6 @@ class UsersService extends CrudService
 
     protected function prepareUpdate($model, $data, $additionalData)
     {
-        $teste = $data;
         $finalData = $finalData = parent::prepareUpdate($model, (array) $data, $additionalData);
         return $finalData;
     }
