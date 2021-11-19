@@ -13,14 +13,14 @@ class Referencias extends ModelBase
     ];
 
     protected $with = [
-        'modalidades'
+        'modalidade'
     ];
 
     public function atividades(){
         return $this->hasMany(Atividades::class, 'referenciaId', 'id');
     }
 
-    public function modalidades(){
+    public function modalidade(){
         return $this->belongsTo(Modalidades::class, 'modalidadeId', 'id');
     }
 }

@@ -14,6 +14,6 @@ class Modalidades extends ModelBase
     ];
 
     public function atividadesReferencia(){
-        return $this->hasMany(Referencias::class, 'referenciaId');
+        return $this->hasMany(Referencias::class, 'modalidadeId');
     }
 }
