@@ -236,7 +236,11 @@ abstract class CrudService
 	protected function performUpdate($model, $data, $additionalData)
 	{
 		return DB::transaction(function () use ($model, $data, $additionalData) {
-			$model->update($this->guardFromUpdate($model, $this->prepareFromFillable($this->prepareUpdate($model, $data, $additionalData), $additionalData)));
+			$prepare = $this->prepareUpdate($model, $data, $additionalData);
+			$prepareFromFillable = $this->prepareFromFillable($prepare, $additionalData);
+			$guard = $this->guardFromUpdate($model, $prepareFromFillable);
+
+			$model->update($guard);
 			return $this->postUpdate($model, $data, $additionalData);
 		});
 	}
