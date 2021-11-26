@@ -34,7 +34,6 @@ class BaseController extends JsonCrudController
 
     protected function prepareFilters($data)
     {
-        //TODO $data['alunoId'] = Auth::user()->alunoId;
         return $data;
     }
 }
