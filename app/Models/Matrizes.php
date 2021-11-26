@@ -5,7 +5,7 @@ namespace App\Models;
 
 class Matrizes extends ModelBase
 {
-    protected $table = 'users';
+    protected $table = 'matrizes';
 
     protected $fillable = [
         'ano',

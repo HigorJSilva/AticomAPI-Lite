@@ -17,7 +17,6 @@ class ModelBase extends Model
 
     public $queryFilters = [
         'and' => [
-            //TODO 'alunoId' => '=',
         ],
     ];
 }
