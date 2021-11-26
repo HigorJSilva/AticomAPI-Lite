@@ -8,7 +8,7 @@ Essa aplicação funciona como um backend simplificado da aplicação Aticom. As
 
  São as atividades complementares que você realizou durante o período de realização do curso (Atividades realizadas antes desse período serão rejeitadas pela secretaria acadêmica).
  
-#### Regras e validações estão no arquivo AtividadesRequest.
+#### Regras e validações estão no arquivo AtividadesRequest [AtividadesRequest](app/Http/Requests/AtividadesRequest.php).
 -   Cadastro;
 -    Edição;
 -    Listagem;
@@ -17,8 +17,7 @@ Essa aplicação funciona como um backend simplificado da aplicação Aticom. As
 ### Atividades de Referência 
 
 São os tipos de atividades que seão aceitas pelo curso como atividades complementares, caso você fez um curso de idiomas a sua atividade de referência é "Participação com aproveitamento em cursos de língua". Por padrão as atividades carregadas são do documento disponibiliazado 26/11/2021.
-####  Regras e validações estão no arquivo ReferenciasRequest.
-- Cadastro;
+####  Regras e validações estão no arquivo [ReferenciasRequest](app/Http/Requests/ReferenciasRequest.php).
 - Edição;
 - Listagem;
 - Remoção.
@@ -26,7 +25,7 @@ São os tipos de atividades que seão aceitas pelo curso como atividades complem
 ### Modalidades
 
 São os módulos os quais as atividades são divididas, cada módulo foi pré-carregado e possui uma carga horária minima e máxima que pode ser editado conforme a necessidade.
- #### Regras e validações estão no arquivo ModalidadesRequest.
+ #### Regras e validações estão no arquivo [ModalidadesRequest](app/Http/Requests/ModalidadesRequest.php).
   
 - Edição;
 - Listagem;
@@ -36,7 +35,7 @@ São os módulos os quais as atividades são divididas, cada módulo foi pré-ca
 
 Aqui você altera os dados de usuário para ter informações corretas conforme os dados de sua matriz. Nome e CPF serão utilizados para montar a planílha final (caso seja implementada),
 
-  #### Regras e validações estão no arquivo UsersRequest.
+  #### Regras e validações estão no arquivo [UsersRequest](app/Http/Requests/UsersRequest.php).
 - Edição;
 - Listagem;
 
@@ -44,7 +43,7 @@ Aqui você altera os dados de usuário para ter informações corretas conforme 
  
  Caso queira você pode salvar os seus certificados em uma pasta no diretório da aplicação
  
- #### Regras e validações estão no arquivo CertificadosRequest.
+ #### Regras e validações estão no arquivo [CertificadosRequest](app/Http/Requests/CertificadosRequest.php).
   
 -   Cadastro;
 -   Edição;
