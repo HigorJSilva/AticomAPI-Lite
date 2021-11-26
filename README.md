@@ -8,7 +8,7 @@ Essa aplicação funciona como um backend simplificado da aplicação Aticom. As
 
  São as atividades complementares que você realizou durante o período de realização do curso (Atividades realizadas antes desse período serão rejeitadas pela secretaria acadêmica).
  
-#### Regras e validações estão no arquivo AtividadesRequest [AtividadesRequest](app/Http/Requests/AtividadesRequest.php).
+#### Regras e validações estão no arquivo [AtividadesRequest](app/Http/Requests/AtividadesRequest.php).
 -   Cadastro;
 -    Edição;
 -    Listagem;
