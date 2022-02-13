@@ -33,5 +33,4 @@ Route::name('modalidades.')->prefix('modalidades/')->group(function () {
 
 Route::apiResource('modalidades', ModalidadesController::class)->except(['store', 'delete']);
 
-Route::apiResource('users', UsersController::class)->except('store');
-Route::apiResource('users', UsersController::class)->only('store');
+Route::apiResource('users', UsersController::class)->except(['store', 'delete']);
