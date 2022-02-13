@@ -1,6 +1,6 @@
 # Aticom API Lite
 
-Essa aplicação funciona como um backend simplificado da aplicação Aticom. Assim como a aversão completa, esta foi criada com o intuito de auxiliar o aluno no controle e acompanhamento de suas atividades, porém a complexidade da versão anterior exigia a manuntenção por parte do responsavel pelas Atividades Complementares do curso, a versão Lite encontra apenas o módulo de alunos, permitindo a completa independencia do estudante durante o período de participação das atividades.
+Essa aplicação funciona como um backend simplificado da aplicação Aticom. Assim como a versão completa, esta foi criada com o intuito de auxiliar o aluno no controle e acompanhamento de suas atividades, porém a complexidade da versão anterior exigia a manuntenção por parte do responsavel pelas Atividades Complementares do curso, a versão Lite encontra apenas o módulo de alunos, permitindo a completa independencia do estudante durante o período de participação das atividades.
 
 ## Funções da versão Lite
 
